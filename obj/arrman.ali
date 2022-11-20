@@ -6,9 +6,14 @@ A -march=x86-64
 P SS ZX
 
 RN
+RV SIMPLE_BARRIERS
 RV NO_EXCEPTION_HANDLERS
+RV NO_EXCEPTION_PROPAGATION
 RV NO_EXCEPTIONS
 RV NO_IO
+RV NO_LOCAL_PROTECTED_OBJECTS
+RV NO_NESTED_FINALIZATION
+RV NO_PROTECTED_TYPES
 RV NO_SECONDARY_STACK
 RV NO_STANDARD_STORAGE_POOLS
 RV NO_TASK_HIERARCHY
@@ -18,11 +23,14 @@ RV NO_DYNAMIC_SIZED_OBJECTS
 RV NO_IMPLEMENTATION_ATTRIBUTES
 RV NO_IMPLEMENTATION_PRAGMAS
 RV NO_IMPLICIT_LOOPS
-RV MAX_TASK_ENTRIES=2
+RV MAX_PROTECTED_ENTRIES=1
+RV MAX_TASK_ENTRIES=1
 RV MAX_TASKS=1+
+RV MAX_ENTRY_QUEUE_LENGTH=1+
 
-U arrman%b		arrman.adb		83b8b89d NE OO SU IL
+U arrman%b		arrman.adb		30cb4b4f NE OO SU IL
 W ada%s			ada.ads			ada.ali
+Z ada.exceptions%s	a-except.adb		a-except.ali
 Z ada.real_time%s	a-reatim.adb		a-reatim.ali
 Z ada.strings.text_buffers%s  a-sttebu.adb	a-sttebu.ali
 W ada.text_io%s		a-textio.adb		a-textio.ali
@@ -34,6 +42,9 @@ Z system.secondary_stack%s  s-secsta.adb	s-secsta.ali
 Z system.soft_links%s	s-soflin.adb		s-soflin.ali
 Z system.task_info%s	s-tasinf.adb		s-tasinf.ali
 Z system.tasking%s	s-taskin.adb		s-taskin.ali
+Z system.tasking.protected_objects%s  s-taprob.adb  s-taprob.ali
+Z system.tasking.protected_objects.entries%s  s-tpoben.adb  s-tpoben.ali
+Z system.tasking.protected_objects.operations%s  s-tpobop.adb  s-tpobop.ali
 Z system.tasking.rendezvous%s  s-tasren.adb	s-tasren.ali
 Z system.tasking.stages%s  s-tassta.adb		s-tassta.ali
 
@@ -49,7 +60,7 @@ D a-stuten.ads		20210520051130 808c40ad ada.strings.utf_encoding%s
 D a-tags.ads		20210520051130 9eaa38c6 ada.tags%s
 D a-textio.ads		20210520051130 aef4d56d ada.text_io%s
 D a-unccon.ads		20210520051130 0e9b276f ada.unchecked_conversion%s
-D arrman.adb		20221120135424 2d4c6df0 arrman%b
+D arrman.adb		20221120144444 9e3f9e22 arrman%b
 D interfac.ads		20210520051132 edec285f interfaces%s
 D i-c.ads		20210520051132 d9beded9 interfaces.c%s
 D i-cstrin.ads		20210520051132 341d0ddf interfaces.c.strings%s
@@ -80,6 +91,7 @@ D s-taprop.ads		20210520051128 6eefbe12 system.task_primitives.operations%s
 D s-taskin.ads		20210520051128 88fba9ad system.tasking%s
 D s-taprob.ads		20210520051128 acd6094d system.tasking.protected_objects%s
 D s-tpoben.ads		20210520051128 60ad3dae system.tasking.protected_objects.entries%s
+D s-tpobop.ads		20210520051128 5f548bb3 system.tasking.protected_objects.operations%s
 D s-tasren.ads		20210520051128 a67a9949 system.tasking.rendezvous%s
 D s-tassta.ads		20210520051128 cca55c94 system.tasking.stages%s
 D s-traent.ads		20210520051134 26a8d361 system.traceback_entries%s
@@ -93,38 +105,43 @@ X 1 ada.ads
 16K9*Ada 20e8 13|1r6 2r5
 X 11 a-textio.ads
 58K13*Text_IO 725e16 13|1w10 2r9
-506U14*Put_Line 13|59s4 72s4
+506U14*Put_Line 13|81s4 94s4
 X 13 arrman.adb
-4U11*arrman 4b11 74l5 74t11
-6i4 array_size{integer} 8r33 48r30 61r10 63r33 63r57 68m7 68r21 68r38 69r23
+4U11*arrman 4b11 96l5 96t11
+6i4 array_size{integer} 8r33 70r30 85r10 87r33 87r57 89m7 89r21 89r38 90r23
 8A9 my_array(integer)<integer> 10r8
-10a4 a{8A9} 14r16 15m10 55r13 56r24 63r25 63r31 66m26 66r26 72r39
-12U14 create_array 12b14 17l8 17t20 53s4
+10a4 a{8A9} 14r16 15m10 31m10 77r13 78r24 87r25 87r31 94r39
+12U14 create_array 12b14 17l8 17t20 75s4
 14i11 i{integer} 15r13 15r19
-19T14 my_task 22l8 22e15 26b14 35m13 36m13 37m13 38m13 46l8 46t15 49r38
-20Y13 start 20>19 20>25 20>32 20>39 34b17 39l14 39t19 63s19
-20i19 left{integer} 35r29
-20i25 RigHt{integer} 36r30
-20i32 index{integer} 37r30
-20i39 s{integer} 38r26
-21Y13 finish 21<20 41b17 43l14 43t20 66s19
-21i20 sum1{integer} 42m13 42r13
-27i7 left{integer} 35m21 40r17
-27i13 RigHt{integer} 36m21 40r24
-28i7 sum{integer} 40m10 42r21
-29i7 index{integer} 37m21 44r20
-30i7 s{integer} 38m21 44r29 44r37
-34i23 left{integer}
-34i29 RigHt{integer}
-34i36 index{integer}
-34i43 s{integer}
-41i25 sum1{integer}
-48i4 thread_count{integer} 49r21 62r19 65r19 69m7
-49a4 task1(19T14) 63r10 66r10
-51i4 sum00{integer} 54m4 56m7 56r16 59r40
-55i8 i{integer} 56r26
-62i11 i{integer} 63r16 63r27 63r46 63r54
-65i11 i{integer} 66r16 66r28
+19w14 task_manager 27b19 42l8 42t20 65r10 83r4 91r7
+20U17 set_res 20>26 20>44 29b17 33l11 33t18 65s23
+20i26 sum{integer} 29b26 31r22
+20i44 index{integer} 29b44 31r12
+21Y13 next_step 21>24 35b13 40l11 40t20 83s17 91s20
+21i24 new_needed_thread_count{integer} 38r33
+23i7 needed_thread_count{integer} 36r37 38r10
+24i7 arrived_thread_count{integer} 32r10 32r34 36r14 39r10
+35i24 new_needed_thread_count{integer}
+44T14 my_task 46l8 46e15 50b14 59m13 60m13 61m13 62m13 68l8 68t15 71r38
+45Y13 start 45>19 45>25 45>32 45>39 58b17 63l14 63t19 87s19
+45i19 left{integer} 59r29
+45i25 RigHt{integer} 60r30
+45i32 index{integer} 61r30
+45i39 s{integer} 62r26
+51i7 left{integer} 59m21 64r17
+51i13 RigHt{integer} 60m21 64r24
+52i7 sum{integer} 64m10 65r31
+53i7 index{integer} 61m21 65r36 66r20
+54i7 s{integer} 62m21 66r29 66r37
+58i23 left{integer}
+58i29 RigHt{integer}
+58i36 index{integer}
+58i43 s{integer}
+70i4 thread_count{integer} 71r21 83r27 86r19 90m7 91r30
+71a4 task1(44T14) 87r10
+73i4 sum00{integer} 76m4 78m7 78r16 81r40
+77i8 i{integer} 78r26
+86i11 i{integer} 87r16 87r27 87r46 87r54
 X 34 s-stausa.ads
 208U14*Initialize 209i<c,__gnat_stack_usage_initialize>22
 273U14*Output_Results 277i<c,__gnat_stack_usage_output_results>22

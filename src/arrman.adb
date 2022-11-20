@@ -16,9 +16,33 @@ procedure arrman is
       end loop;
    end create_array;
 
+   protected task_manager is
+      procedure set_res (sum : in Integer; index : in integer);
+      entry next_step (new_needed_thread_count : in Integer);
+   private
+      needed_thread_count : Integer      := 0;
+      arrived_thread_count : Integer      := 0;
+   end task_manager;
+
+   protected body task_manager is
+
+      procedure set_res (sum : in Integer; index : in integer) is
+      begin
+         a(index) := sum;
+         arrived_thread_count := arrived_thread_count + 1;
+      end set_res;
+
+      entry next_step (new_needed_thread_count : in Integer)
+        when arrived_thread_count = needed_thread_count is
+      begin
+         needed_thread_count := new_needed_thread_count;
+         arrived_thread_count := 0;
+      end next_step;
+
+   end task_manager;
+
    task type my_task is
       entry start(left, RigHt, index, s : in Integer);
-      entry finish(sum1 : out Integer);
    end my_task;
 
 
@@ -38,9 +62,7 @@ procedure arrman is
             my_task.s := s;
          end start;
          sum := left + right;
-         accept finish (sum1 : out Integer) do
-            sum1 := sum;
-         end finish;
+         task_manager.set_res(sum, index);
          exit when index > (s / 2 + s mod 2) / 2;
       end loop;
    end my_task;
@@ -58,15 +80,15 @@ begin
 
    Put_Line("Single-thread result: " & sum00'img);
 
+   task_manager.next_step(thread_count);
+
    while array_size > 1 loop
       for i in 1..thread_count loop
          task1(i).start(a(i), a(array_size - i + 1), i, array_size);
       end loop;
-      for i in 1..thread_count loop
-         task1(i).finish(a(i));
-      end loop;
       array_size := array_size / 2 + array_size mod 2;
       thread_count := array_size / 2;
+      task_manager.next_step(thread_count);
    end loop;
 
    Put_Line("Multi-thread result: " & a(1)'img);
