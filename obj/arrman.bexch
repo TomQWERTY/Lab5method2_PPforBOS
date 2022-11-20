@@ -1,0 +1,22 @@
+[GENERATED OBJECT FILE]
+b__arrman.o
+[PROJECT FILES]
+E:\Univer\paralel\Lab_5_Method_2\lab_5_method_2.gpr
+20221120135122 7be1c4228289efc0372ed9e87ba55be8
+[BOUND OBJECT FILES]
+E:\Univer\paralel\Lab_5_Method_2\obj\arrman.o
+[GENERATED SOURCE FILES]
+b__arrman.ads
+b__arrman.adb
+b__arrman.ali
+[RESULTING OPTIONS]
+-LE:\Univer\paralel\Lab_5_Method_2\obj\
+-LE:\Univer\paralel\Lab_5_Method_2\obj\
+-LE:/programs/gnat_ada/lib/gcc/x86_64-w64-mingw32/10.3.1/adalib/
+-static
+-static-libgcc
+E:/programs/gnat_ada/lib/gcc/x86_64-w64-mingw32/10.3.1/adalib/libgnarl.a
+E:/programs/gnat_ada/lib/gcc/x86_64-w64-mingw32/10.3.1/adalib/libgnat.a
+-Xlinker
+--stack=0x200000,0x1000
+-mthreads
